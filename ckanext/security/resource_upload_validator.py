@@ -81,7 +81,7 @@ def _has_upload(resource):
         else:
             return isinstance(resource.get('upload'), FileStorage)
     else:
-        return isinstance(resource.get('upload'), FieldStorage)
+        return isinstance(resource.get('upload'), FieldStorage) or isinstance(resource.get('upload'), FileStorage)
 
 
 def validate_upload_type(resource):
