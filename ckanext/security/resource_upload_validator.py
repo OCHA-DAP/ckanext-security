@@ -98,7 +98,7 @@ def validate_upload_type(resource):
     filename = resource.get('url')
     if _has_upload(resource):
         field_storage = resource.get('upload')
-        uploaded_file = field_storage.stream if is_flask_request() else \
+        uploaded_file = field_storage.stream if isinstance(field_storage, FileStorage) else \
             field_storage.file
         filename = field_storage.filename
 
