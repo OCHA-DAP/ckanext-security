@@ -3,6 +3,8 @@
 import logging
 import json
 
+from ckanext.security.model import SecurityTOTP
+
 from ckan.views import user
 from ckanext.security import utils, authenticator
 from ckan.lib import helpers
@@ -44,6 +46,10 @@ def check_lockout():
     lockout['result'] = locked
     return json.dumps(lockout)
 
+def check_mfa():
+    user_name = request.args['user']
+    totp_challenger = SecurityTOTP.get_for_user(user_name)
+    return json.dumps({'result': totp_challenger is not None})
 
 @login_required
 def configure_mfa(id=None):
@@ -64,6 +70,8 @@ mfa_user.add_url_rule('/configure_mfa/<id>',
 mfa_user.add_url_rule('/configure_mfa/<id>/new',
                       view_func=new, methods=['GET', 'POST'])
 mfa_user.add_url_rule('/api/check_lockout', view_func=check_lockout, methods=['GET'])
+mfa_user.add_url_rule('/api/check_mfa', view_func=check_mfa, methods=['GET'])
+
 
 def get_blueprints():
     return [mfa_user]

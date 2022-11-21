@@ -30,7 +30,7 @@
 
   </fieldset>
 
-  <fieldset>
+  <fieldset  class="mTop10">
     <legend>{{ _('Change password') }}</legend>
     {{ form.input('old_password',
                   type='password',
@@ -47,7 +47,7 @@
     {{ form.input('password2', type='password', label=_('Confirm Password'), id='field-password-confirm', value=data.password2, error=errors.password2, classes=['control-medium'], attrs={'autocomplete': 'off'}) }}
   </fieldset>
 
-  <fieldset>
+  <fieldset class="mTop10">
     <legend>{{_('Two factor authentication')}}</legend>
     {% if h.check_ckan_version('2.9') %}
       {% link_for _('Manage two factor authentication'), controller='mfa_user', action='configure_mfa', id=data.id, class_='btn btn-default pull-left', icon='cog' %}
@@ -56,7 +56,7 @@
     {% endif %}
   </fieldset>
 
-  <div class="form-actions">
+  <div class="form-actions mTop45">
     {% block delete_button %}
       {% if h.check_access('user_delete', {'id': data.id})  %}
         {% set locale = h.dump_json({'content': _('Are you sure you want to delete this User?')}) %}
