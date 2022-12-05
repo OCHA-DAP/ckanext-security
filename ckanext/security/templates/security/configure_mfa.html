@@ -57,6 +57,8 @@
 
     {% set locale = h.dump_json({'content': _('Are you sure you want to generate a new two factor secret?')}) %}
     {% set new_mfa_challenge = h.url_for(controller='mfa_user' if h.check_ckan_version('2.9') else 'ckanext.security.controllers:MFAUserController', action='new', id=c.totp_user_id) %}
+    {% set del_mfa_challenge = h.url_for(controller='mfa_user' if h.check_ckan_version('2.9') else 'ckanext.security.controllers:MFAUserController', action='delete', id=c.user_dict.name) %}
     <a class="btn btn-danger" href="{{new_mfa_challenge}}" data-module="confirm-action" data-module-i18n="{{ locale }}">{{_('Generate new two factor secret')}}</a>
+    <a class="btn btn-danger" href="{{del_mfa_challenge}}" data-module="confirm-action" data-module-i18n="{{ locale }}">{{_('DISABLE OTP')}}</a>
     <p>{{_('This should only be necessary if you have deleted the authenticator app or are replacing your phone.')}}</p>
 {% endblock %}

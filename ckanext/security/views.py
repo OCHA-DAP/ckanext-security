@@ -63,12 +63,22 @@ def new(id=None):
     utils.new(id)
     return helpers.redirect_to('mfa_user.configure_mfa', id=id)
 
+@login_required
+def delete(id=None):
+    totp_challenger = SecurityTOTP.get_for_user(id)
+    if totp_challenger:
+        totp_challenger.delete()
+        totp_challenger.commit()
+    return helpers.redirect_to('mfa_user.configure_mfa', id=id)
+
 
 mfa_user.add_url_rule('/api/mfa_login', view_func=login, methods=['POST'])
 mfa_user.add_url_rule('/configure_mfa/<id>',
                       view_func=configure_mfa, methods=['GET', 'POST'])
 mfa_user.add_url_rule('/configure_mfa/<id>/new',
                       view_func=new, methods=['GET', 'POST'])
+mfa_user.add_url_rule('/configure_mfa/<id>/delete',
+                      view_func=delete, methods=['GET'])
 mfa_user.add_url_rule('/api/check_lockout', view_func=check_lockout, methods=['GET'])
 mfa_user.add_url_rule('/api/check_mfa', view_func=check_mfa, methods=['GET'])
 
