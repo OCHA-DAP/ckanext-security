@@ -109,7 +109,6 @@ class CKANLoginThrottle(UsernamePasswordAuthenticator):
         # the request and the user wasn't locked out above,
         # then check the TOTP parameter to see if it is valid
         if auth_user_name is not None:
-            throttle.reset()
             totp_success = self.authenticate_totp(environ, auth_user_name)
             # if TOTP was successful -- reset the log in throttle
             if totp_success:
@@ -124,6 +123,8 @@ class CKANLoginThrottle(UsernamePasswordAuthenticator):
         if totp_challenger is None:
             log.info("Login attempted without MFA configured for: %s",
                      auth_user)
+            ##########
+            # HDX Edit
             # for now allow users that don't have MFA to login
             return auth_user
             # return None
