@@ -127,7 +127,12 @@ class SecurityTOTP(DomainObject):
                 'No user found for SecurityTOTP instance with user_id {}'
                 .format(self.user_id))
 
-        issuer = toolkit.config['ckan.site_url']
+        ##########
+        # HDX Edit
+        # use user_name when searching the TOTP
+        issuer = toolkit.config['hdx.security.site_name']
+        # END HDX Edit
+        #########
         return pyotp.TOTP(self.secret)\
             .provisioning_uri(user.name, issuer_name=issuer)
 
