@@ -122,6 +122,9 @@ class CKANLoginThrottle(UsernamePasswordAuthenticator):
                 # HDX Edit
                 # return auth_user_name
                 return auth_user_name
+                # add log error when invalid mfa used
+            else:
+                log.info("Invalid MFA token for: %s", user_name)
                 # END HDX Edit
                 #########
 
