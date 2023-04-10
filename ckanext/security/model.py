@@ -129,12 +129,32 @@ class SecurityTOTP(DomainObject):
 
         ##########
         # HDX Edit
-        # use user_name when searching the TOTP
+        # use site_name for issuer in 2FA apps
         issuer = toolkit.config['hdx.security.site_name']
         # END HDX Edit
         #########
         return pyotp.TOTP(self.secret)\
             .provisioning_uri(user.name, issuer_name=issuer)
+
+    ##########
+    # HDX Edit
+    # use User.name when searching the TOTP
+    @staticmethod
+    def get_user_name(login):
+        # we first try to see if user is not logging in via email; check ckan/lib/autenticator.py:23
+        users = User.by_email(login)
+        try:
+            user = users[0]
+            user_name = user.name
+        except:
+            user_name = None
+
+        if not user_name:
+            user_name = login
+
+        return user_name
+    # END HDX Edit
+    #########
 
     def __repr__(self):
         return '<SecurityTOTP user_id={} last_successful_challenge={} >'\

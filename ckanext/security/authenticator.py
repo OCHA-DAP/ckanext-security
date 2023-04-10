@@ -72,7 +72,12 @@ class CKANLoginThrottle(UsernamePasswordAuthenticator):
         by user name, ie only a limited number of attempts can be made
         to log into a specific account within a period of time."""
         try:
-            user_name = identity['login']
+            ##########
+            # HDX Edit
+            # use user_name when searching the TOTP, the login might be with email also
+            user_name = SecurityTOTP.get_user_name(identity['login'])
+            # END HDX Edit
+            #########
         except KeyError:
             return None
 
