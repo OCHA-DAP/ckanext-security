@@ -6,7 +6,7 @@ from ckan.plugins import toolkit as tk
 from ckan.logic import schema as core_schema
 from ckanext.security.model import define_security_tables, db_setup
 from ckanext.security.resource_upload_validator import (
-    validate_upload_type, validate_upload_presence
+    validate_upload
 )
 from ckanext.security.logic import auth, action
 
@@ -53,15 +53,19 @@ class CkanSecurityPlugin(MixinPlugin, p.SingletonPlugin):
 
     # BEGIN Hooks for IResourceController
 
+    # CKAN < 2.10
     def before_create(self, context, resource):
-        validate_upload_presence(resource)
-        validate_upload_type(resource)
-        pass
+        validate_upload(resource)
 
     def before_update(self, context, current, resource):
-        validate_upload_presence(resource)
-        validate_upload_type(resource)
-        pass
+        validate_upload(resource)
+
+    # CKAN >= 2.10
+    def before_resource_create(self, context, resource):
+        validate_upload(resource)
+
+    def before_resource_update(self, context, current, resource):
+        validate_upload(resource)
 
     # END Hooks for IResourceController
 
