@@ -142,17 +142,14 @@ class SecurityTOTP(DomainObject):
     @staticmethod
     def get_user_name(login):
         # we first try to see if user is not logging in via email; check ckan/lib/autenticator.py:23
-        users = User.by_email(login)
-        try:
-            user = users[0]
-            user_name = user.name
-        except:
-            user_name = None
+        user = User.get(login)
 
-        if not user_name:
-            user_name = login
+        # make sure the user is active
+        if user and user.state == 'active':
+            return user.name
 
-        return user_name
+        log.warning('Could not find an active user for name/email/id: {}'.format(login))
+        return None
     # END HDX Edit
     #########
 
