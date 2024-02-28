@@ -72,6 +72,9 @@ def authenticate(identity):
         # HDX Edit
         # use user_name when searching the TOTP, the login might be with email also
         user_name = SecurityTOTP.get_user_name(identity['login'])
+        # if no user could be found (and thus no username) we return None
+        if not user_name:
+            return None
         # END HDX Edit
         #########
     except KeyError:
