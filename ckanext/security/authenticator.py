@@ -64,21 +64,22 @@ def authenticate(identity):
     by user name, ie only a limited number of attempts can be made
     to log into a specific account within a period of time."""
 
-    # Run through the CKAN auth sequence first, so we can hit the DB
-    # in every case and make timing attacks a little more difficult.
-    ckan_auth_result = default_authenticate(identity)
+    ##########
+    # HDX Edit
     try:
-        ##########
-        # HDX Edit
         # use user_name when searching the TOTP, the login might be with email also
         user_name = SecurityTOTP.get_user_name(identity['login'])
+        identity['login'] = user_name
         # if no user could be found (and thus no username) we return None
         if not user_name:
             return None
-        # END HDX Edit
-        #########
     except KeyError:
         return None
+    # Run through the CKAN auth sequence first, so we can hit the DB
+    # in every case and make timing attacks a little more difficult.
+    ckan_auth_result = default_authenticate(identity)
+    # END HDX Edit
+    #########
 
     login_throttle_key = get_login_throttle_key(
         request, user_name)
