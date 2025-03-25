@@ -26,8 +26,9 @@ def db_setup():
 #         sys.exit(1)
 #         return
 
-    if not user_security_totp.exists():
-        user_security_totp.create()
+    engine = model.ensure_engine()
+    if not user_security_totp.exists(engine):
+        user_security_totp.create(engine)
         print("Created security TOTP table")
     else:
         print("Security TOTP table already exists -- skipping")
