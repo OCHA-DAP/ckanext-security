@@ -29,9 +29,9 @@ def db_setup():
     engine = model.ensure_engine()
     if not user_security_totp.exists(engine):
         user_security_totp.create(engine)
-        print("Created security TOTP table")
+        log.info("Created security TOTP table")
     else:
-        print("Security TOTP table already exists -- skipping")
+        log.debug("Security TOTP table already exists -- skipping")
 
 
 def define_security_tables():
